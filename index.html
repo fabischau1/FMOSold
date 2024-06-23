@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>FMOS</title>
+  <style>
+    /* Retro terminal styling */
+    body {
+      background-color: #000;
+      font-family: monospace;
+    }
+    #terminal {
+      font-size: 24px;
+      color: #0066cc;
+    }
+  </style>
+</head>
+<body>
+  <div id="terminal">
+    <div id="output"></div>
+    <div id="input-line">
+      <span id="prompt">Admin:~$ </span>
+      <span id="input" contenteditable="true"></span>
+    </div>
+  </div>
+
+  <script>
+    const terminal = document.getElementById('terminal');
+    const output = document.getElementById('output');
+    const prompt = document.getElementById('prompt');
+    const input = document.getElementById('input');
+    let command = '';
+    let history = [];
+    let historyIndex = -1;
+
+    input.focus();
+
+    document.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        handleInput(input.textContent);
+        input.textContent = ''; // Clear the input field
+      }
+    });
+
+    function handleInput(command) {
+      try {
+        const result = eval(command);
+        const outputLine = document.createElement('div');
+        outputLine.innerHTML = `<div>${command}</div><div>Result: ${result}</div>`;
+        output.appendChild(outputLine);
+      } catch (e) {
+        const outputLine = document.createElement('div');
+        outputLine.innerHTML = `<div>${command}</div><div>Error: ${e.message}</div>`;
+        output.appendChild(outputLine);
+      }
+      terminal.scrollTop = terminal.scrollHeight;
+    }
+  </script>
+</body>
+</html>
